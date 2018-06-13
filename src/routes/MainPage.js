@@ -2,25 +2,30 @@ import React from 'react';
 import { connect } from 'dva';
 import styles from './MainPage.css';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import HeaderMenu from '../components/HeaderMenu/HeaderMenu';
+import { headerMenuData, siderMenuData } from '../common/menu'
 
 function MainPage() {
   const { SubMenu } = Menu;
   const { Header, Content, Sider } = Layout;
 
   return (
-    <Layout>
+    <Layout style={{ height:'100%' }}>
       <Header className="header">
         <div className={styles.logo} />
-        <Menu
+        <HeaderMenu
+          menuData={ headerMenuData }
+        />
+        {/*<Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={['2']}
+          defaultSelectedKeys={['1']}
           style={{ lineHeight: '64px' }}
         >
           <Menu.Item key="1">nav 1</Menu.Item>
           <Menu.Item key="2">nav 2</Menu.Item>
           <Menu.Item key="3">nav 3</Menu.Item>
-        </Menu>
+        </Menu>*/}
       </Header>
       <Layout>
         <Sider width={200} style={{ background: '#fff' }}>
