@@ -46,10 +46,10 @@ export default class HeaderMenu extends Component{
       }
       return null;
     } else {
-      return <Menu.Item key={item.path}>{this.getMenuItemPath(item)}</Menu.Item>;
+      return <Menu.Item key={item.path}>{item.name}</Menu.Item>;
     }
   };
-  reader () {
+  render () {
     return (
       <Menu
         theme="dark"
