@@ -14,7 +14,7 @@ export const headerMenuData = [
 export const siderMenuData = [
   {
     name: '招聘管理',
-    icon: 'recruit',
+    icon: 'usergroup-add',
     path: 'recruit',
     children: [
       {
@@ -29,7 +29,7 @@ export const siderMenuData = [
   },
   {
     name: '新流程中心',
-    icon: 'process',
+    icon: 'fork',
     path: 'process',
     children: [
       {

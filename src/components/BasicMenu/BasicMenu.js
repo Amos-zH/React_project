@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { Menu } from 'antd';
+import { Menu, Icon } from 'antd';
 
 const { SubMenu } = Menu;
 
-export default class HeaderMenu extends Component{
+export default class BasicMenu extends Component{
   constructor(props) {
     super(props);
     this.menus = props.menuData;
-  }
+  };
+  /**
+   * 获得菜单子节点
+   */
   getNavMenuItems = menusData => {
     if (!menusData) {
       return [];
@@ -16,18 +19,13 @@ export default class HeaderMenu extends Component{
       .filter(item => item.name)
       .map(item => {
         // make dom
-        const ItemDom = this.getSubMenuOrItem(item);
-        return this.checkPermissionItem(item.authority, ItemDom);
+        return this.getSubMenuOrItem(item);
       })
       .filter(item => item);
   };
-  checkPermissionItem = (authority, ItemDom) => {
-    if (this.props.Authorized && this.props.Authorized.check) {
-      const { check } = this.props.Authorized;
-      return check(authority, ItemDom);
-    }
-    return ItemDom;
-  };
+  /**
+   * get SubMenu or Item
+   */
   getSubMenuOrItem = item => {
     if (item.children && item.children.some(child => child.name)) {
       const childrenItems = this.getNavMenuItems(item.children);
@@ -36,7 +34,12 @@ export default class HeaderMenu extends Component{
         return (
           <SubMenu
             title={
-              item.name
+              item.icon ? (
+                <span>
+                  {this.getIcon(item.icon)}
+                  <span>{item.name} </span>
+                </span>
+              ) : item.name
             }
             key={item.path}
           >
@@ -49,13 +52,20 @@ export default class HeaderMenu extends Component{
       return <Menu.Item key={item.path}>{item.name}</Menu.Item>;
     }
   };
+  getIcon = icon => {
+    if (typeof icon === 'string') {
+      return <Icon type={icon} />;
+    }
+    return icon;
+  };
   render () {
     return (
       <Menu
-        theme="dark"
-        mode="horizontal"
-        defaultSelectedKeys={['1']}
-        style={{ lineHeight: '64px' }}
+        theme={ this.props.theme }
+        mode={ this.props.mode }
+        defaultSelectedKeys={ this.props.defaultSelectedKeys }
+        defaultOpenKeys={ this.props.defaultOpenKeys }
+        style={ this.props.style }
       >
         { this.getNavMenuItems(this.menus) }
       </Menu>
