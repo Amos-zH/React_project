@@ -1,11 +1,31 @@
 import React from 'react';
 import { connect } from 'dva';
+import { Redirect, Switch } from 'dva/router';
 import styles from './MainPage.css';
 import { Layout, Breadcrumb } from 'antd';
 import BasicMenu from '../components/BasicMenu/BasicMenu';
-import { headerMenuData, siderMenuData } from '../common/menu';
+import { getHeraderMenuDate, getSiderMenuDate } from '../common/menu';
 
 const { Header, Content, Sider } = Layout;
+
+/**
+ * 根据菜单取得重定向地址.
+ */
+const redirectData = [];
+const getRedirect = item => {
+  if (item && item.children) {
+    if (item.children[0] && item.children[0].path) {
+      redirectData.push({
+        from: `${item.path}`,
+        to: `${item.children[0].path}`,
+      });
+      item.children.forEach(children => {
+        getRedirect(children);
+      });
+    }
+  }
+};
+getSiderMenuDate().forEach(getRedirect);
 
 function MainPage() {
   return (
@@ -13,7 +33,7 @@ function MainPage() {
       <Header className="header">
         <div className={styles.logo} />
         <BasicMenu
-          menuData={ headerMenuData }
+          menuData={ getHeraderMenuDate() }
           mode = { 'horizontal' }
           theme = { 'dark' }
           defaultSelectedKeys={['process']}
@@ -23,7 +43,7 @@ function MainPage() {
       <Layout>
         <Sider width={200} style={{ background: '#fff' }}>
           <BasicMenu
-            menuData = { siderMenuData }
+            menuData = { getSiderMenuDate() }
             mode = { 'inline' }
             theme = { 'light' }
             defaultSelectedKeys={['todo']}
@@ -38,7 +58,11 @@ function MainPage() {
             <Breadcrumb.Item>App</Breadcrumb.Item>
           </Breadcrumb>
           <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
-            Content
+            <Switch>
+              {redirectData.map(item => (
+                <Redirect key={item.from} exact from={item.from} to={item.to} />
+              ))}
+            </Switch>
           </Content>
         </Layout>
       </Layout>

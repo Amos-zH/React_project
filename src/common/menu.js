@@ -1,4 +1,4 @@
-export const headerMenuData = [
+const headerMenuData = [
   {
     name: '招聘管理',
     icon: 'recruit',
@@ -11,7 +11,7 @@ export const headerMenuData = [
   }
 ];
 
-export const siderMenuData = [
+const siderMenuData = [
   {
     name: '招聘管理',
     icon: 'usergroup-add',
@@ -43,3 +43,21 @@ export const siderMenuData = [
     ]
   }
 ];
+
+function formatter(data, parentPath = '/') {
+  return data.map(item => {
+    let { path } = item;  //相当于let path = item.path;
+    path = parentPath + path;
+    const result = {
+      ...item,
+      path
+    };
+    if (item.children) {
+      result.children = formatter(item.children, `${parentPath}${item.path}/`);
+    }
+    return result;
+  })
+}
+
+export const getHeraderMenuDate = () => formatter(headerMenuData);
+export const getSiderMenuDate = () => formatter(siderMenuData);

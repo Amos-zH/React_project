@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Menu, Icon } from 'antd';
+import { Link } from 'dva/router';
 
 const { SubMenu } = Menu;
 
@@ -49,9 +50,29 @@ export default class BasicMenu extends Component{
       }
       return null;
     } else {
-      return <Menu.Item key={item.path}>{item.name}</Menu.Item>;
+      return <Menu.Item key={item.path}>{this.getMenuItemPath(item)}</Menu.Item>;
     }
   };
+  /**
+   * 返回Link
+   */
+  getMenuItemPath = item => {
+    const itemPath = `/${item.path || ''}`.replace(/\/+/g, '/');
+    const icon = this.getIcon(item.icon);
+    const { target, name } = item;
+    return (
+      <Link
+        to = {itemPath}
+        target = {target}
+      >
+        {icon}
+        <span>{name}</span>
+      </Link>
+    );
+  };
+  /**
+   * 渲染图标
+   */
   getIcon = icon => {
     if (typeof icon === 'string') {
       return <Icon type={icon} />;
